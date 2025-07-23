@@ -1,0 +1,67 @@
+# Lego Pixelator
+# The Main Thread: Madelyn Jeffers, Zainab Khoshnaw
+# Description: # Lego Pixelator
+# The Main Thread: Madelyn Jeffers, Zainab Khoshnaw
+# Description: This project is an image processor that turns normal images into a pixelated lego-like 
+#   veresion. It works by analyzing the original image pixel by pixel and grouping them into color 
+#   blocks, making the image look like it’s made out of lego bricks.
+
+import os
+
+def get_img_path():
+    path = input("Enter the path to your image file: ").replace('"', '').replace("'", '').strip()
+
+    if not os.path.isfile(path):
+        raise FileNotFoundError("File not found.")
+    
+    # check extension
+    ext = os.path.splitext(path)[1].lower()
+    if ext not in {".jpg", ".jpeg", ".png", ".bmp"}:
+        raise ValueError("Invalid file type.")
+    
+    return path
+
+print("Welcome to Lego Pixelator")
+print("Please upload a file that is either a .jpg, .jpeg, .png, or a .bmp extension.\n")
+
+valid = False
+
+while not valid:
+    try:
+        img_path = get_img_path()
+        valid = True
+    except Exception as e:
+        print('Error: ', e)
+        print("Please try again.\n")
+
+print(f"\nUploaded Image: {img_path}")
+
+import os
+
+def get_img_path():
+    path = input("Enter the path to your image file: ").replace('"', '').replace("'", '').strip()
+
+    if not os.path.isfile(path):
+        raise FileNotFoundError("File not found.")
+    
+    # check extension
+    ext = os.path.splitext(path)[1].lower()
+    if ext not in {".jpg", ".jpeg", ".png", ".bmp"}:
+        raise ValueError("Invalid file type.")
+    
+    return path
+
+print("Welcome to Lego Pixelator")
+print("Please upload a file that is either a .jpg, .jpeg, .png, or a .bmp extension.\n")
+
+valid = False
+
+while not valid:
+    try:
+        img_path = get_img_path()
+        valid = True
+    except Exception as e:
+        print('Error: ', e)
+        print("Please try again.\n")
+
+print(f"\nUploaded Image: {img_path}")
