@@ -7,8 +7,14 @@
 #   blocks, making the image look like it’s made out of lego bricks.
 
 import os
+from PIL import Image, ImageDraw
+from Lego_Pixelator_Slicing import slice_image_into_grid
+from Lego_Pixelator_Average_Colors import get_lego_pixel_blocks
 
 def get_img_path():
+    """
+    Get the image path and ensure it is the correct extension.
+    """
     path = input("Enter the path to your image file: ").replace('"', '').replace("'", '').strip()
 
     if not os.path.isfile(path):
@@ -20,6 +26,36 @@ def get_img_path():
         raise ValueError("Invalid file type.")
     
     return path
+
+def assemble_image(blocks, grid_size):
+    """
+    Assembles a list of image blocks into one final image based on the blocks 
+    ad the grid size. This function returns a final combined image or None if
+    there's an error.
+    """
+    if not blocks:
+        print("ERROR: No blocks received.")
+        return None
+
+    expected = grid_size[0] * grid_size[1]
+    if len(blocks) != expected:
+        print(f"ERROR: Expected {expected} blocks, got {len(blocks)}")
+        return None
+
+    block_width, block_height = blocks[0].size
+    total_width = grid_size[0] * block_width
+    total_height = grid_size[1] * block_height
+
+    final_img = Image.new('RGB', (total_width, total_height))
+
+    for index, block in enumerate(blocks):
+        row = index // grid_size[0]
+        col = index % grid_size[0]
+        x = col * block_width
+        y = row * block_height
+        final_img.paste(block, (x, y))
+
+    return final_img
 
 print("Welcome to Lego Pixelator")
 print("Please upload a file that is either a .jpg, .jpeg, .png, or a .bmp extension.\n")
@@ -36,32 +72,23 @@ while not valid:
 
 print(f"\nUploaded Image: {img_path}")
 
-import os
+grid_dimension = (48, 48)
+sliced_blocks = slice_image_into_grid(img_path, grid_dimension)
 
-def get_img_path():
-    path = input("Enter the path to your image file: ").replace('"', '').replace("'", '').strip()
+if sliced_blocks:
+    print(f"Ready to process {len(sliced_blocks)} blocks into Lego bricks.")
+else:
+    print("Image slicing failed. Please check the image or path.")
+ 
 
-    if not os.path.isfile(path):
-        raise FileNotFoundError("File not found.")
-    
-    # check extension
-    ext = os.path.splitext(path)[1].lower()
-    if ext not in {".jpg", ".jpeg", ".png", ".bmp"}:
-        raise ValueError("Invalid file type.")
-    
-    return path
+lego_blocks = get_lego_pixel_blocks(sliced_blocks)
+final_img = assemble_image(lego_blocks, grid_dimension)
 
-print("Welcome to Lego Pixelator")
-print("Please upload a file that is either a .jpg, .jpeg, .png, or a .bmp extension.\n")
-
-valid = False
-
-while not valid:
-    try:
-        img_path = get_img_path()
-        valid = True
-    except Exception as e:
-        print('Error: ', e)
-        print("Please try again.\n")
-
-print(f"\nUploaded Image: {img_path}")
+if final_img:
+    final_img.show()
+    # final_img.save('lego_output.png')
+    print('Lego Pielation complete!')
+else:
+    print(f"lego_blocks length: {len(lego_blocks)}")  # should be 2304
+    print('Failed to assemble the image.')
+       
