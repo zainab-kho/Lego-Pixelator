@@ -1,27 +1,16 @@
 # Lego Pixelator
 # The Main Thread: Madelyn Jeffers, Zainab Khoshnaw
 # Description: This project is an image processor that turns normal images into a pixelated lego-like
-# version. It works by analyzing the original image pixel by pixel and grouping them into color
-# blocks, making the image look like it’s made out of lego bricks.
+#   version. It works by analyzing the original image pixel by pixel and grouping them into color
+#   blocks, making the image look like it’s made out of lego bricks.
 
-import os
 from PIL import Image #import the Pillow library
-
-def get_img_path():
-    path = input("Enter the path to your image file: ").replace('"', '').replace("'", '').strip()
-
-    if not os.path.isfile(path):
-        raise FileNotFoundError("File not found.")
-
-    # check extension
-    ext = os.path.splitext(path)[1].lower()
-    if ext not in {".jpg", ".jpeg", ".png", ".bmp"}:
-        raise ValueError("Invalid file type.")
-
-    return path
 
 # slicing an image into a 48x48
 def slice_image_into_grid(image_path, grid_size=(48, 48)):
+    """ 
+    Sicing an image into a 48x48
+    """
     try:
         #open image and print the original dimensions
         img = Image.open(image_path)
@@ -67,28 +56,5 @@ def slice_image_into_grid(image_path, grid_size=(48, 48)):
         return []
 
 
-print("Welcome to Lego Pixelator")
-print("Please upload a file that is either a .jpg, .jpeg, .png, or a .bmp extension.\n")
 
-valid = False
-img_path = None 
 
-while not valid:
-    try:
-        img_path = get_img_path() 
-        valid = True
-    except Exception as e:
-        print('Error: ', e)
-        print("Please try again.\n")
-
-print(f"\nUploaded Image: {img_path}")
-
-if img_path: 
-    grid_dimension = (48, 48) #define the grid size
-    sliced_blocks = slice_image_into_grid(img_path, grid_dimension)
-
-    if sliced_blocks:
-        print(f"Ready to process {len(sliced_blocks)} into Lego bricks.")
-        
-    else:
-        print("Image slicing failed. Please check the image or path.")
