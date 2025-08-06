@@ -8,8 +8,8 @@
 
 import os
 from PIL import Image, ImageDraw
-from Lego_Pixelator_Slicing import slice_image_into_grid
-from Lego_Pixelator_Average_Colors import get_lego_pixel_blocks
+from lego_pixelator_slicing import slice_image_into_grid
+from lego_pixelator_average_colors import get_lego_pixel_blocks
 
 def get_img_path():
     """
