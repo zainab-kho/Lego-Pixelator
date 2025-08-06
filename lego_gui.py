@@ -9,9 +9,9 @@
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk, ImageOps, ImageDraw
-from Lego_Pixelator_Slicing import slice_image_into_grid
-from Lego_Pixelator_Average_Colors import get_lego_pixel_blocks
-from Lego_Pixelator_Main import assemble_image
+from lego_pixelator_slicing import slice_image_into_grid
+from lego_pixelator_average_Colors import get_lego_pixel_blocks
+from lego_pixelator_main import assemble_image
 
 grid_size = (48, 48)
 
