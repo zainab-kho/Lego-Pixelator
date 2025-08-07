@@ -4,12 +4,6 @@
 #   veresion. It works by analyzing the original image pixel by pixel and grouping them into color 
 #   blocks, making the image look like it’s made out of lego bricks.
 
-# Lego Pixelator
-# The Main Thread: Madelyn Jeffers, Zainab Khoshnaw
-# Description: This project is an image processor that turns normal images into a pixelated lego-like 
-#   veresion. It works by analyzing the original image pixel by pixel and grouping them into color 
-#   blocks, making the image look like it’s made out of lego bricks.
-
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk, ImageOps, ImageDraw
