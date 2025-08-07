@@ -1,3 +1,9 @@
+# Lego Pixelator
+# The Main Thread: Madelyn Jeffers, Zainab Khoshnaw
+# Description: This project is an image processor that turns normal images into a pixelated lego-like
+#   version. It works by analyzing the original image pixel by pixel and grouping them into color
+#   blocks, making the image look like it’s made out of lego bricks.
+
 import numpy as np
 from PIL import Image, ImageDraw
 from lego_colors import lego_colors
