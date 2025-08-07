@@ -4,14 +4,25 @@
 #   veresion. It works by analyzing the original image pixel by pixel and grouping them into color 
 #   blocks, making the image look like it’s made out of lego bricks.
 
+# Lego Pixelator
+# The Main Thread: Madelyn Jeffers, Zainab Khoshnaw
+# Description: This project is an image processor that turns normal images into a pixelated lego-like 
+#   veresion. It works by analyzing the original image pixel by pixel and grouping them into color 
+#   blocks, making the image look like it’s made out of lego bricks.
+
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk, ImageOps, ImageDraw
 from lego_pixelator_slicing import slice_image_into_grid
 from lego_pixelator_average_colors import get_lego_pixel_blocks
 from lego_pixelator_main import assemble_image
+from tkinter import Toplevel, Text, Scrollbar, RIGHT, Y, END
+from lego_colors import lego_colors  # Needed for mapping RGB to name
 
 grid_size = (48, 48)
+
+def rgb_to_hex(rgb):
+    return '{:02X}{:02X}{:02X}'.format(*rgb)
 
 class LegoApp:
     """
@@ -55,6 +66,10 @@ class LegoApp:
         self.save_btn = tk.Button(button_frame, text="Save Photo", font=("Helvetica", 12), command=self.save_image, state=tk.DISABLED)
         self.save_btn.pack(side=tk.LEFT, padx=5)
         
+        # show bricks button
+        self.stats_btn = tk.Button(button_frame, text="Show Brick Stats", font=("Helvetica", 12), command=self.show_stats, state=tk.DISABLED)
+        self.stats_btn.pack(side=tk.LEFT, padx=5)
+
         # close app
         self.root.protocol("WM_DELETE_WINDOW", self.quit_app)
 
@@ -102,8 +117,10 @@ class LegoApp:
         self.process_btn.config(state=tk.DISABLED)
         
         blocks = slice_image_into_grid(self.img_path, grid_size)
-        lego_blocks = get_lego_pixel_blocks(blocks)
+        lego_blocks, color_counts = get_lego_pixel_blocks(blocks)
+        self.color_counts = color_counts
         final_img = assemble_image(lego_blocks, grid_size)
+
 
         # upscale final output to 800px wide
         if final_img.width < 800:
@@ -113,8 +130,10 @@ class LegoApp:
 
         self.final_img = final_img # save for export
         self.save_btn.config(state=tk.NORMAL) # enable the save button
+        self.stats_btn.config(state=tk.NORMAL)
         final_img.show()
         
+
     def save_image(self):
         """
         Opens a save dialog and saves the final pixelated image.
@@ -124,7 +143,35 @@ class LegoApp:
             file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
             if file_path:
                 self.final_img.save(file_path)
-                
+            
+
+    def show_stats(self):
+        #Display a popup window showing total bricks and color counts
+
+        if not hasattr(self, 'color_counts'):
+            return
+
+        stats_win = Toplevel(self.root)
+        stats_win.title("LEGO Brick Statistics")
+        stats_win.geometry("300x400")
+
+        scrollbar = Scrollbar(stats_win)
+        scrollbar.pack(side=RIGHT, fill=Y)
+
+        text_widget = Text(stats_win, wrap='word', yscrollcommand=scrollbar.set)
+        text_widget.pack(expand=True, fill='both')
+
+        scrollbar.config(command=text_widget.yview)
+
+        total = sum(self.color_counts.values())
+        text_widget.insert(END, f"Total Bricks: {total}\n\n")
+
+        sorted_colors = sorted(self.color_counts.items(), key=lambda x: -x[1])
+        for rgb, count in sorted_colors:
+            hex_code = rgb_to_hex(rgb)
+            name = lego_colors.get(hex_code, f"Unknown ({hex_code})")
+            text_widget.insert(END, f"{name}: {count}\n")
+                    
     def quit_app(self):
         """
         Fully quits the app and closes the tkinter window.
