@@ -89,7 +89,7 @@ class LegoApp:
             img.save(rotated_path)
             self.img_path = rotated_path
 
-            # resize preview to always be 800px wide (maintain aspect ratio)
+            # resize preview to always be 200px wide (maintain aspect ratio)
             preview_width = 200
             aspect_ratio = img.height / img.width
             preview_height = int(preview_width * aspect_ratio)
@@ -131,7 +131,7 @@ class LegoApp:
     def save_image(self):
         """
         Opens a save dialog and saves the final pixelated image.
-        only enabeld after pixelation is complete.
+        Only enabeld after pixelation is complete.
         """
         if hasattr(self, 'final_img'):
             file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
@@ -140,7 +140,9 @@ class LegoApp:
             
 
     def show_stats(self):
-        #Display a popup window showing total bricks and color counts
+        """
+        Display a popup window showing total bricks and color counts
+        """
 
         if not hasattr(self, 'color_counts'):
             return
