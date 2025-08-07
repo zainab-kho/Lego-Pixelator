@@ -72,9 +72,14 @@ def add_shading(block):
 def get_lego_pixel_blocks(img_list):
     """
     Process a list of image tiles and gets average color,
-    maps it to a LEGO color, and returns a list of styled image blocks
+    maps it to a LEGO color, and returns:
+    - list of styled image blocks
+    - dictionary of color counts
     """
+    from collections import defaultdict
+
     solid_blocks = []
+    color_counts = defaultdict(int)
 
     for i, img in enumerate(img_list):
         if img.mode != 'RGB':
@@ -83,6 +88,9 @@ def get_lego_pixel_blocks(img_list):
         avg_color = tuple(np_img.mean(axis=(0, 1)).astype(int))
         closest_rgb = find_closest_lego_rgb(avg_color)
 
+        # increment count
+        color_counts[closest_rgb] += 1
+
         # create solid color block
         block = Image.new('RGB', img.size, closest_rgb)
         block = add_shading(block)
@@ -90,4 +98,4 @@ def get_lego_pixel_blocks(img_list):
 
         solid_blocks.append(block)
 
-    return solid_blocks
+    return solid_blocks, color_counts
