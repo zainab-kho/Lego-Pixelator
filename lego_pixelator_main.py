@@ -4,32 +4,12 @@
 #   veresion. It works by analyzing the original image pixel by pixel and grouping them into color 
 #   blocks, making the image look like it’s made out of lego bricks.
 
-import os
-from lego_pixelator_slicing import slice_image_into_grid
-from lego_pixelator_average_colors import get_lego_pixel_blocks
-from PIL import Image,  ImageOps
-
-def get_img_path():
-    """
-    Get the image path and ensure it is the correct extension.
-    """
-    path = input("Enter the path to your image file: ").replace('"', '').replace("'", '').strip()
-
-    if not os.path.isfile(path):
-        raise FileNotFoundError("File not found.")
-    
-    # check extension
-    ext = os.path.splitext(path)[1].lower()
-    if ext not in {".jpg", ".jpeg", ".png", ".bmp"}:
-        raise ValueError("Invalid file type.")
-    
-    return path
+from PIL import Image
 
 def assemble_image(blocks, grid_size):
     """
     Assembles a list of image blocks into one final image based on the blocks 
-    ad the grid size. This function returns a final combined image or None if
-    there's an error.
+    and the grid size. Returns the final combined image.
     """
     if not blocks:
         print("ERROR: No blocks received.")
@@ -54,42 +34,3 @@ def assemble_image(blocks, grid_size):
         final_img.paste(block, (x, y))
 
     return final_img
-
-def main():
-    print("Welcome to Lego Pixelator")
-    print("Please upload a file that is either a .jpg, .jpeg, .png, or a .bmp extension.\n")
-
-    valid = False
-
-    while not valid:
-        try:
-            img_path = get_img_path()
-            valid = True
-        except Exception as e:
-            print('Error: ', e)
-            print("Please try again.\n")
-
-    print(f"\nUploaded Image: {img_path}")
-
-    grid_dimension = (48, 48)
-    sliced_blocks = slice_image_into_grid(img_path, grid_dimension)
-
-    if sliced_blocks:
-        print(f"Ready to process {len(sliced_blocks)} blocks into Lego bricks.")
-    else:
-        print("Image slicing failed. Please check the image or path.")
-    
-
-    lego_blocks = get_lego_pixel_blocks(sliced_blocks)
-    final_img = assemble_image(lego_blocks, grid_dimension)
-
-    if final_img:
-        final_img.show()
-        # final_img.save('lego_output.png')
-        print('Lego Pielation complete!')
-    else:
-        print(f"lego_blocks length: {len(lego_blocks)}")  # should be 2304
-        print('Failed to assemble the image.')
-
-if __name__ == "__main__":
-    main()
