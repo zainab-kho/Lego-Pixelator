@@ -54,7 +54,3 @@ def slice_image_into_grid(image_path, grid_size=(48, 48)):
     except Exception as e:
         print(f"An error occurred while slicing the image: {e}")
         return []
-
-
-
-
