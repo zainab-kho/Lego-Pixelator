@@ -17,12 +17,14 @@ Users can upload an image, preview it, pixelate it using LEGO-like bricks, and s
 - Blocks have shading and 3D “studs” to resemble real LEGO pieces
 - Final image is upscaled and viewable
 - Users can save the output as a `.png` file
+- Users can view a list of all lego bricks used and how many
 
 ## How It Works
 1. User opens the app and uploads an image
 2. A preview of the image appears in the app
 3. Clicking **"Pixelate It!"** runs the processing
 4. The result is displayed and can be saved with **"Save Photo"**
+5. The block list is displayed with **"Show Brick Stats"**
 
 ## Requirements
 - Python 3.7+
